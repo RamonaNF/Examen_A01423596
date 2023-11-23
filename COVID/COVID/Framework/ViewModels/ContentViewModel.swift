@@ -9,6 +9,7 @@ import Foundation
 
 class ContentViewModel: ObservableObject { // Emite cambios de sus valores
     @Published var countriesList = [DateResponse]() // Notifica cambios al ContentView
+    @Published var dateParam = "2022-01-01"
     
     var covidRequirement: CovidRequirement
 
@@ -18,8 +19,7 @@ class ContentViewModel: ObservableObject { // Emite cambios de sus valores
     
     @MainActor // Singleton del OS para que el método corra en el mainQueue
     func getCountriesList() async {
-        countriesList = await covidRequirement.getRecordsByDate(dateParam: "2022-01-01")
-        
-        print(countriesList)
+        countriesList = await covidRequirement.getRecordsByDate(dateParam: dateParam)
+        //print(countriesList)
     }
 }
