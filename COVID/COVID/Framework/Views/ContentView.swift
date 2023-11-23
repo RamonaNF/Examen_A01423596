@@ -14,7 +14,7 @@ struct ContentView: View {
     @State var totalAvg: Float = 0.0
     
     @State var increasing: [DateResponse] = []
-    @State var increatingAvg: Float = 0.0
+    @State var increasingAvg: Float = 0.0
     var limit: Int = 3
     
     var body: some View {
@@ -102,7 +102,7 @@ struct ContentView: View {
                     Image(systemName: "info.circle.fill")
                         .foregroundColor(.blue)
                     
-                    Text("Promedio de casos nuevos: \(totalAvg)")
+                    Text("Promedio de casos nuevos: \(increasingAvg)")
                         .font(.caption)
                 }
             }
@@ -128,15 +128,15 @@ struct ContentView: View {
     
     func statistics() {
         totalAvg = 0.0
-        increatingAvg = 0.0
+        increasingAvg = 0.0
         
         for record in contentViewModel.countriesList {
             totalAvg += Float(record.cases.total)
-            increatingAvg += Float(record.cases.new)
+            increasingAvg += Float(record.cases.new)
         }
         
         totalAvg /= Float(contentViewModel.countriesList.count)
-        increatingAvg = Float(contentViewModel.countriesList.count)
+        increasingAvg = Float(contentViewModel.countriesList.count)
     }
 }
 
