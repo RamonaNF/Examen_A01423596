@@ -11,30 +11,45 @@ import Alamofire
 struct ContentView: View {
     @StateObject var contentViewModel = ContentViewModel() // Vigilar el estado de una variable observable
     @State var total: [DateResponse] = []
-    @State var totalAvg: Int = 0
+    @State var totalAvg: Float = 0.0
     
     @State var increasing: [DateResponse] = []
-    @State var increatingAvg: Int = 0
+    @State var increatingAvg: Float = 0.0
     var limit: Int = 3
     
     var body: some View {
-        VStack {
-            Group {
-                Text("Registros analizados: \(contentViewModel.countriesList.count)")
-                    .font(.footnote)
-                    .frame(alignment: .leading)
+        VStack (spacing: 4) {
+            Group { // Información general
+                HStack {
+                    Text("Regiones analizadas: \(contentViewModel.countriesList.count)")
+                        .font(.footnote)
+                        .frame(alignment: .leading)
+                    
+                    Image(systemName: "globe.americas")
+                        .foregroundColor(.green)
+                }
                 
-                Text("Fecha: \(contentViewModel.dateParam)")
-                    .font(.footnote)
-                    .frame(alignment: .leading)
+                HStack {
+                    Image(systemName: "calendar")
+                        .foregroundColor(.blue)
+                    
+                    Text("Fecha: \(contentViewModel.dateParam)")
+                        .font(.footnote)
+                        .frame(alignment: .leading)
+                }
                 
                 Spacer().frame(height: 16)
             }
             
-            Group {
-                Text("Más casos registrados")
-                    .font(.headline)
-                    .frame(alignment: .leading)
+            Group { // Sobre el total de casos...
+                HStack {
+                    Image(systemName: "exclamationmark.triangle.fill")
+                        .foregroundColor(.yellow)
+                    
+                    Text("Más casos registrados")
+                        .font(.headline)
+                        .frame(alignment: .leading)
+                }
                 
                 if(total.count == 0) {
                     Text("Cargando estadísticas...")
@@ -42,21 +57,33 @@ struct ContentView: View {
                         .foregroundStyle(.secondary)
                 } else {
                     ForEach(0..<(limit < total.count ? limit : total.count)) {
-                        i in Text("\(total[i].cases.total) casos en \(total[i].country)")
-                            .font(.body)
+                        i in Text("\(total[i].cases.total) casos en \(total[i].region + (total[i].region == "" ? "" : ", "))\(total[i].country)")
+                            .font(.footnote)
                     }
                 }
                 
-                Text("El promedio de casos es de \(totalAvg)")
-                    .font(.caption)
+                Spacer().frame(height: 8)
+                
+                HStack {
+                    Image(systemName: "info.circle.fill")
+                        .foregroundColor(.blue)
+                    
+                    Text("Promedio de casos: \(totalAvg)")
+                        .font(.caption)
+                }
                 
                 Spacer().frame(height: 16)
             }
             
-            Group {
-                Text("Apariciones en aumento")
-                    .font(.headline)
-                    .frame(alignment: .leading)
+            Group { // Sobre los nuevos casos...
+                HStack {
+                    Image(systemName: "exclamationmark.triangle.fill")
+                        .foregroundColor(.yellow)
+                    
+                    Text("Apariciones en aumento")
+                        .font(.headline)
+                        .frame(alignment: .leading)
+                }
                 
                 if(increasing.count == 0) {
                     Text("Cargando estadísticas...")
@@ -64,32 +91,31 @@ struct ContentView: View {
                         .foregroundStyle(.secondary)
                 } else {
                     ForEach(0..<(limit < increasing.count ? limit : increasing.count)) {
-                        i in Text("\(increasing[i].cases.total) nuevos casos en \(increasing[i].country)")
-                            .font(.body)
+                        i in Text("\(increasing[i].cases.new) casos nuevos en \(increasing[i].region + (increasing[i].region == "" ? "" : ", "))\(increasing[i].country)")
+                            .font(.footnote)
                     }
                 }
                 
-                Text("El promedio de casos nuevos es de \(totalAvg)")
-                    .font(.caption)
+                Spacer().frame(height: 8)
                 
-                Spacer()
+                HStack {
+                    Image(systemName: "info.circle.fill")
+                        .foregroundColor(.blue)
+                    
+                    Text("Promedio de casos nuevos: \(totalAvg)")
+                        .font(.caption)
+                }
             }
-            
-            Text("1341687 nuevos casos en Mexico")
-                .font(.footnote)
-            Text("Canada")
-                .font(.subheadline)
-            Text("1341687 nuevos casos en Quebec")
-                .font(.footnote)
             
         }.padding()
          .frame(maxWidth: .infinity)
-         /*.onAppear {
+         .onAppear {
             Task {
                 await contentViewModel.getCountriesList()
                 top()
+                statistics()
             }
-        }*/
+        }
     }
     
     func top() {
@@ -98,6 +124,19 @@ struct ContentView: View {
         
         // Apariciones en aumento
         increasing = contentViewModel.countriesList.sorted(by: { $0.cases.new > $1.cases.new })
+    }
+    
+    func statistics() {
+        totalAvg = 0.0
+        increatingAvg = 0.0
+        
+        for record in contentViewModel.countriesList {
+            totalAvg += Float(record.cases.total)
+            increatingAvg += Float(record.cases.new)
+        }
+        
+        totalAvg /= Float(contentViewModel.countriesList.count)
+        increatingAvg = Float(contentViewModel.countriesList.count)
     }
 }
 
