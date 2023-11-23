@@ -13,18 +13,16 @@ class NetworkAPIService {
     static let shared = NetworkAPIService()
 
     // Obtener respuesta de la API
-    func getAPIinfo(url: URL) async -> [DateResponse] {
+    func getAPIinfo(url: URL, params: Parameters) async -> [DateResponse] {
         let headers: HTTPHeaders = [
-            "Content-Type":"application/json",
+            //"Content-Type":"application/json",
             "X-Api-Key": "wLVPN1zV08lJYF7uXqgyPw==zVwp6TlVcAO1NLUf"
         ]
-        
-        //print("REQUEST URL ", url)
         
         do {
             // Petición y manejo de error o éxito en la respuesta
             return try await withCheckedThrowingContinuation {
-                continuation in AF.request(url, method: .get, headers: headers)
+                continuation in AF.request(url, method: .get, parameters: params, headers: headers)
                     .responseDecodable(of: [DateResponse].self) {
                         response in switch response.result {
                             case .success(let data):

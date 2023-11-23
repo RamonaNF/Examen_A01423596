@@ -9,18 +9,14 @@ import SwiftUI
 import Alamofire
 
 struct ContentView: View {
-    let nservice: NetworkAPIService
-    
-    init(nservice: NetworkAPIService = NetworkAPIService.shared) { // Asigna parámetro por default
-        self.nservice = nservice
-    }
+    @StateObject var contentViewModel = ContentViewModel() // Vigilar el estado de una variable observable
     
     var body: some View {
         Text("Hello, world!")
             .padding()
             .onAppear {
                 Task {
-                    print(await nservice.getAPIinfo(url: URL(string:"https://api.api-ninjas.com/v1/covid19?date=2022-01-01")!))
+                    await contentViewModel.getCountriesList()
                 }
             }
     }

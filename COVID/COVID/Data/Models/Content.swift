@@ -7,18 +7,18 @@
 
 import Foundation
 
-/*struct CountryResponse: Decodable {
-    var country: String
-    var region: String
-    var cases: [Case]
-}*/
-
 struct Case: Codable {
     var total: Int
     var new: Int
 }
 
-struct DateResponse: Decodable {
+/*struct CountryResponse: Codable {
+    var country: String
+    var region: String
+    var cases: [Any]
+}*/
+
+struct DateResponse: Codable {
     var country: String
     var region: String
     var cases: Case
