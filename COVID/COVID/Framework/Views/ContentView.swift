@@ -136,7 +136,7 @@ struct ContentView: View {
         }
         
         totalAvg /= Float(contentViewModel.countriesList.count)
-        increasingAvg = Float(contentViewModel.countriesList.count)
+        increasingAvg /= Float(contentViewModel.countriesList.count)
     }
 }
 
