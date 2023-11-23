@@ -15,7 +15,6 @@ class NetworkAPIService {
     // Obtener respuesta de la API
     func getAPIinfo(url: URL, params: Parameters) async -> [DateResponse] {
         let headers: HTTPHeaders = [
-            //"Content-Type":"application/json",
             "X-Api-Key": "wLVPN1zV08lJYF7uXqgyPw==zVwp6TlVcAO1NLUf"
         ]
         
@@ -26,7 +25,7 @@ class NetworkAPIService {
                     .responseDecodable(of: [DateResponse].self) {
                         response in switch response.result {
                             case .success(let data):
-                                print("SUCCESS", data)
+                                //print("SUCCESS", data)
                                 continuation.resume(returning: data)
                                 
                             case .failure(let error):
