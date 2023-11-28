@@ -114,6 +114,7 @@ struct ContentView: View {
                 await contentViewModel.getCountriesList()
                 top()
                 statistics()
+                await contentViewModel.getCountryList()
             }
         }
     }

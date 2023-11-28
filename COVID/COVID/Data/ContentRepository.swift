@@ -16,6 +16,9 @@ protocol CovidAPIProtocol { //  Mapear API (conexiones, URLs necesarias) -> BAAS
     
     // https://api.api-ninjas.com/v1/covid19?date=2022-01-01
     func getRecordsByDate(dateParam: String) async -> [DateResponse]
+    
+    // https://api.api-ninjas.com/v1/covid19?country=Mexico
+    func getRecordsByCountry(countryParam: String) async -> [CountryResponse]
 }
 
 
@@ -41,6 +44,14 @@ class CovidRepository: CovidAPIProtocol { // Se hereda del protocolo
     func getRecordsByDate(dateParam: String) async -> [DateResponse] {
         let params: [String:String] = [
             "date": dateParam
+        ]
+        
+        return await nservice.getAPIinfo(url: URL(string:"\(Api.base)\(Api.routes.root)")!, params: params)
+    }
+    
+    func getRecordsByCountry(countryParam: String) async -> [CountryResponse] {
+        let params: [String:String] = [
+            "country": countryParam
         ]
         
         return await nservice.getAPIinfo(url: URL(string:"\(Api.base)\(Api.routes.root)")!, params: params)

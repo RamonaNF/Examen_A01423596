@@ -9,6 +9,7 @@ import Foundation
 
 protocol CovidRequirementProtocol {
     func getRecordsByDate(dateParam: String) async -> [DateResponse]
+    func getRecordsByCountry(countryParam: String) async -> [CountryResponse]
 }
 
 class CovidRequirement: CovidRequirementProtocol {
@@ -21,5 +22,9 @@ class CovidRequirement: CovidRequirementProtocol {
     
     func getRecordsByDate(dateParam: String) async -> [DateResponse] {
         return await dataRepository.getRecordsByDate(dateParam: dateParam)
+    }
+    
+    func getRecordsByCountry(countryParam: String) async -> [CountryResponse] {
+        return await dataRepository.getRecordsByCountry(countryParam: countryParam)
     }
 }
