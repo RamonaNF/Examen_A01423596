@@ -10,6 +10,8 @@ import Alamofire
 
 struct ContentView: View {
     @StateObject var contentViewModel = ContentViewModel() // Vigilar el estado de una variable observable
+    @State var countries: [String] = []
+    
     @State var total: [DateResponse] = []
     @State var totalAvg: Float = 0.0
     
@@ -105,8 +107,38 @@ struct ContentView: View {
                     Text("Promedio de casos nuevos: \(totalAvg)")
                         .font(.caption)
                 }
+                
+                Spacer().frame(height: 16)
             }
             
+            Group { // Sobre un país en específico...
+                HStack {
+                    Text("Evolución específica")
+                        .font(.footnote)
+                    
+                    Spacer()
+                    
+                    Image(systemName: "magnifyingglass.circle.fill")
+                        .foregroundColor(.gray)
+                    
+                    Picker(selection: $contentViewModel.countryParam) {
+                        ForEach(countries, id: \.self) {
+                            country in Text(country).tag(country)
+                        }
+                    } label: {
+                        Text("Selecciona un país")
+                    }.onChange(of: contentViewModel.countryParam) {
+                        //tag in print("Country: \(tag)")
+                        tag in Task {
+                            //print(contentViewModel.countryParam)
+                            await contentViewModel.getCountryList()
+                            //print(contentViewModel.countryList)
+                        }
+                     }
+                }.padding([.top, .bottom], 4)
+                 .padding([.leading, .trailing], 8)
+                 .background(Color(UIColor.systemGray6))
+            }
         }.padding()
          .frame(maxWidth: .infinity)
          .onAppear {
@@ -134,7 +166,12 @@ struct ContentView: View {
         for record in contentViewModel.countriesList {
             totalAvg += Float(record.cases.total)
             increatingAvg += Float(record.cases.new)
+            
+            if(!countries.contains(record.country)) {
+                countries.append(record.country)
+            }
         }
+        //print(countries)
         
         totalAvg /= Float(contentViewModel.countriesList.count)
         increatingAvg = Float(contentViewModel.countriesList.count)

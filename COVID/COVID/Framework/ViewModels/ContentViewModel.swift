@@ -29,6 +29,6 @@ class ContentViewModel: ObservableObject { // Emite cambios de sus valores
     @MainActor // Singleton del OS para que el método corra en el mainQueue
     func getCountryList() async {
         countryList = await covidRequirement.getRecordsByCountry(countryParam: countryParam)
-        print(countryList)
+        //print(countryList)
     }
 }
