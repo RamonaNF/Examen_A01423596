@@ -12,11 +12,11 @@ struct Case: Codable {
     var new: Int
 }
 
-/*struct CountryResponse: Codable {
+struct CountryResponse: Codable {
     var country: String
     var region: String
-    var cases: [Any]
-}*/
+    var cases: [String: Case]
+}
 
 struct DateResponse: Codable {
     var country: String
